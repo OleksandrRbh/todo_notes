@@ -10,17 +10,17 @@
         <router-link
           :to="{name: 'notes'}"
         >
-          <button>CANCEL</button>
+          <button @click="cancelChanges">CANCEL</button>
         </router-link>
         <router-link
           :to="{name: 'notes'}"
         >
-          <button @click="deleteNote(this.id)">DELETE</button>
+          <button @click="deleteNote">DELETE</button>
         </router-link>
       </div>
       <div class="note">
         <p>
-          <input type="text" name="" v-model="noteParams.name">
+          <input type="text" name="" v-model="noteParams.name" placeholder="Имя заметки">
         </p>
         <p v-for="(todo, subindex) of noteParams.todo_list" :key="subindex">
           <input type="checkbox" name="" v-model="noteParams.todo_list[subindex].checked">
@@ -28,7 +28,7 @@
           <button @click="deleteTodo(subindex)">delele todo</button>
         </p>
         <p>
-          <input type="text" name="" v-model="newTodo">
+          <input type="text" name="" v-model="newTodo" placeholder="Добавить задачу">
           <button @click="addTodo">add todo</button>
         </p>
       </div>    
@@ -60,7 +60,10 @@ export default {
     }),      
   },
   methods: {
-    addTodo() {      
+    addTodo() {
+      if (!this.noteParams.todo_list) {
+        this.noteParams.todo_list = []
+      }
       let obj = {};
       obj.todo = this.newTodo;
       obj.checked = false;
@@ -70,22 +73,36 @@ export default {
     deleteTodo(subindex) {
       this.noteParams.todo_list.splice(subindex, 1)
     },
-    setNote() {
-      console.log(this.noteParams);
-      console.log(this.id);
+    setNote() {      
       if (this.$route.params.id || this.$route.params.id === 0) {
         this.$store.dispatch("UPDATE_NOTE", {index: this.id, note: this.noteParams});
       } else {
         this.$store.dispatch("ADD_NOTE", this.noteParams);
+        this.noteParams = {};
       }
     },
-    deleteNote(index) {
-      this.$store.dispatch("DELETE_NOTE", index);
+    deleteNote() {        
+      if (this.id !== undefined) {    
+        this.$store.dispatch("DELETE_NOTE", this.id);
+      } else {
+        this.noteParams = {};
+      }
+    },
+    cancelChanges() {
+      if (this.id !== undefined) {
+        this.noteParams = JSON.parse(JSON.stringify(this.note(this.id)));
+      } else {
+        this.noteParams = {};
+      }
+      this.newTodo = '';
     }
   },    
   watch: {},
-  created() {
-    this.noteParams = Object.assign({}, this.note(this.id));
+  created() {    
+    if (this.id !== undefined) {
+      this.noteParams = JSON.parse(JSON.stringify(this.note(this.id)));
+    }   
+    
     if (!this.noteParams.name) {
       this.noteParams.name = ''
     }
@@ -93,9 +110,7 @@ export default {
       this.noteParams.todo_list = []      
     }   
   },
-  mounted() {    
-    console.log(this.noteParams);  
-  }, 
+  mounted() {}, 
 }
 </script>
 

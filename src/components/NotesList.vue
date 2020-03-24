@@ -43,43 +43,6 @@ export default {
     return {
       title: 'Мои заметки',
       
-      // notes: [
-      //   {
-      //     name: 'Some note',
-      //     todo_list: [
-      //       { checked: false, todo: 'купить хлеб' },
-      //       { checked: false, todo: 'выгулять собаку' },
-      //       { checked: false, todo: 'сделать что-то важное' },
-      //       { checked: false, todo: 'убрать у кота' },
-      //     ]
-      //   },
-      //   {
-      //     name: 'Заметка',
-      //     todo_list: [
-      //       { checked: false, todo: 'купить хлеб' },            
-      //       { checked: false, todo: 'посадить дерево' },            
-      //     ]
-      //   },
-      //   {
-      //     name: 'Еще одна',
-      //     todo_list: [            
-      //       { checked: false, todo: 'убрать' },
-      //       { checked: false, todo: 'убрать у кота' },
-      //       { checked: false, todo: 'убрать у кота' }, 
-      //     ]
-      //   },
-      //   {
-      //     name: 'Важно',
-      //     todo_list: [
-      //       { checked: false, todo: 'купить хлеб' },
-      //       { checked: false, todo: 'выгулять собаку' },
-      //       { checked: false, todo: 'посадить дерево' },
-      //       { checked: false, todo: 'убрать у кота' },
-      //       { checked: false, todo: 'сходить в магазин' },
-      //       { checked: false, todo: 'убрать у кота' },
-      //     ]
-      //   },
-      // ]
     }
   },
   computed: {
