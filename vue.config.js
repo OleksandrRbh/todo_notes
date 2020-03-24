@@ -6,7 +6,5 @@ module.exports = {
       }
     }
   },
-  publicPath: process.env.NODE_ENV === 'production'
-    ? '/users_db/'
-    : '/'
+  publicPath: process.env.NODE_ENV === 'production' ? '/todo_notes/' : '/'
 };
