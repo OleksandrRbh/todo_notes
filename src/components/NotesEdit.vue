@@ -25,7 +25,7 @@
         <p v-for="(todo, subindex) of noteParams.todo_list" :key="subindex">
           <input type="checkbox" name="" v-model="noteParams.todo_list[subindex].checked">
           <input type="text" name="" v-model="noteParams.todo_list[subindex].todo">        
-          <button @click="deleteTodo(subindex)">Delele todo</button>
+          <button @click="deleteTodo(subindex)">delele todo</button>
         </p>
         <p>
           <input type="text" name="" v-model="newTodo" placeholder="Добавить задачу">
