@@ -216,6 +216,7 @@ export default {
         this.noteParams = {};
       }
       this.newTodo = '';
+      this.isCancelPopupVisible = false;
     },
     showPopupDelete() {
       this.isInfoPopupVisible = true;        
