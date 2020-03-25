@@ -1,5 +1,5 @@
 <template>
-  <div class="notes-list"> 
+  <div class="notes-list">   
     <div class="actions">  
       <h1>{{ title }}</h1>    
       <router-link
@@ -31,7 +31,7 @@
         </div>
         <div class="list-item__actions">
           <VBtn
-            @click="deleteNote(index)"               
+            @click="showPopupInfo(index)"                        
             title="Delete note"        
             :disabled="false"        
             :bg_red="true"
@@ -41,31 +41,62 @@
             class="link-btn"
             :to="{name: 'notes-edit', params: {id: index}}"
           >          
-            <VBtn                            
+            <VBtn                                         
               title="Edit note"        
               :disabled="false"            
               prependIcon="create"        
             />
-          </router-link>
+          </router-link>          
         </div>
+
+        <VPopup
+          v-if="isInfoPopupVisible === true"
+          @closePopup="closePopup"
+          popupTitle="Confirm action"          
+        >
+          <div>
+            <p>Are you sure you want to delete the note <b>"{{ popupCurrentNoteTitle }}"</b>?</p>
+            <div class="popup-actions">              
+              <VBtn
+                @click="closePopup"
+                class="close-modal"         
+                title="Cancel"
+                prependIcon="cancel"
+              />
+              <VBtn
+                @click="deleteNote(index)"                          
+                title="Delete note"        
+                :disabled="false"        
+                :bg_red="true"
+                prependIcon="delete"        
+              />              
+            </div>
+          </div>
+        </VPopup>
+
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapState} from "vuex"
 import VBtn from "./VBtn"
+import VPopup from "./VPopup"
 
 export default {
   name: 'NotesList',
   components: {    
-    VBtn
+    VBtn,
+    VPopup
   },  
   props: {},
   data() {
     return {
-      title: 'My notes',      
+      title: 'My notes',
+      isInfoPopupVisible: false,
+      popupCurrentNoteTitle: '',
+      noteCurrentIndex: null
     }
   },
   computed: {
@@ -74,8 +105,17 @@ export default {
     })
   },
   methods: {
-    deleteNote(index) {
+    deleteNote(index) {      
       this.$store.dispatch("DELETE_NOTE", index);
+      this.isInfoPopupVisible = false;
+    },
+    showPopupInfo(index) {
+      this.isInfoPopupVisible = true;
+      this.noteCurrentIndex = index;
+      this.popupCurrentNoteTitle = this.notes[index].name;      
+    },
+    closePopup() {
+      this.isInfoPopupVisible = false
     }
   },
   watch: {},
@@ -138,6 +178,11 @@ export default {
     .list-item__actions {
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .popup-actions {
+      display: flex;
       justify-content: space-between;
     }
   }  

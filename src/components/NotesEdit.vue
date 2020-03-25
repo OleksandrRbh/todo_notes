@@ -2,18 +2,13 @@
   <div class="notes-edit">
     <header class="notes-edit__header">
       <span v-if="this.id !== undefined">{{ titleForEdit }}</span>
-      <span v-if="this.id === undefined">{{ titleForNew }}</span>      
-      <router-link
-        class="link-btn"
-        :to="{name: 'notes'}"
-      >          
-        <VBtn
-          @click="cancelChanges"
-          title="Cancel"        
-          :disabled="false"            
-          prependIcon="cancel"        
-        />
-      </router-link>
+      <span v-if="this.id === undefined">{{ titleForNew }}</span>               
+      <VBtn
+        @click="showPopupCancel"
+        title="Cancel"        
+        :disabled="false"            
+        prependIcon="cancel"        
+      />      
     </header>
     <main class="notes-edit__main">
       <div class="actions">
@@ -29,20 +24,17 @@
             :bg_green="true"
             prependIcon="save"        
           />
-        </router-link>        
-        <router-link
-          class="link-btn"
-          :to="{name: 'notes'}"
-        >          
-          <VBtn
-            class="action-btn"
-            @click="deleteNote"
-            title="Delete note"        
-            :disabled="false"        
-            :bg_red="true"
-            prependIcon="delete"        
-          />
-        </router-link>
+        </router-link>                  
+        <VBtn
+          class="action-btn"
+          @click="showPopupDelete"
+          title="Delete note"        
+          :disabled="this.id === undefined"        
+          :bg_red="true"
+          prependIcon="delete"        
+        />       
+
+
       </div>
       <div class="note">
         <div class="note__title-wrapper">          
@@ -75,7 +67,7 @@
         
         <form class="form-add-todo" action="" @submit="addTodo">          
           <VTextField 
-            placeholder="Добавить задачу"           
+            placeholder="Add todo"           
             v-model="newTodo"
             label=""            
           />         
@@ -90,6 +82,67 @@
         
       </div> 
     </main>
+
+    <VPopup
+      v-if="isInfoPopupVisible === true"
+      @closePopup="closePopup"
+      popupTitle="Confirm action"          
+    >
+      <div>
+        <p>Are you sure you want to delete the note <b>"{{ popupCurrentNoteTitle }}"</b>?</p>
+        <div class="popup-actions">              
+          <VBtn
+            @click="closePopup"
+            class="close-modal"         
+            title="Cancel"
+            prependIcon="cancel"
+          />
+          <router-link
+            class="link-btn"
+            :to="{name: 'notes'}"
+          > 
+            <VBtn
+              @click="deleteNote"                          
+              title="Delete note"        
+              :disabled="false"        
+              :bg_red="true"
+              prependIcon="delete"        
+            />   
+          </router-link>
+        </div>
+      </div>
+    </VPopup>
+
+    <VPopup
+      v-if="isCancelPopupVisible === true"
+      @closePopup="closePopup"
+      popupTitle="Confirm action"          
+    >
+      <div>
+        <p>Are you sure you want to cancel changes</p>
+        <div class="popup-actions">              
+          <VBtn
+            @click="closePopup"
+            class="close-modal"         
+            title="Cancel"
+            prependIcon="cancel"
+          />
+          <router-link
+            class="link-btn"
+            :to="{name: 'notes'}"
+          > 
+            <VBtn
+              @click="cancelChanges"                          
+              title="Don't save"        
+              :disabled="false"        
+              :bg_red="true"
+              prependIcon="delete"        
+            />   
+          </router-link>
+        </div>
+      </div>
+    </VPopup>
+    
   </div>
 </template>
 
@@ -97,12 +150,14 @@
 import {mapGetters} from "vuex";
 import VBtn from "./VBtn"
 import VTextField from "./VTextField"
+import VPopup from "./VPopup"
 
 export default {
   name: 'NotesEdit',
   components: {
     VBtn,
-    VTextField
+    VTextField,
+    VPopup
   },  
   props: {
     
@@ -113,7 +168,10 @@ export default {
       titleForNew: 'New note',
       id: this.$route.params.id,
       noteParams: {},
-      newTodo: ''  
+      newTodo: '',
+      isInfoPopupVisible: false,
+      popupCurrentNoteTitle: '',
+      isCancelPopupVisible: false
     }
   },
   computed: {  
@@ -149,6 +207,7 @@ export default {
       } else {
         this.noteParams = {};
       }
+      this.isInfoPopupVisible = false;
     },
     cancelChanges() {
       if (this.id !== undefined) {
@@ -157,6 +216,16 @@ export default {
         this.noteParams = {};
       }
       this.newTodo = '';
+    },
+    showPopupDelete() {
+      this.isInfoPopupVisible = true;        
+    },
+    closePopup() {
+      this.isInfoPopupVisible = false;
+      this.isCancelPopupVisible = false;
+    },
+    showPopupCancel() {
+      this.isCancelPopupVisible = true;
     }
   },    
   watch: {},
@@ -172,7 +241,9 @@ export default {
       this.noteParams.todo_list = []      
     }   
   },
-  mounted() {}, 
+  mounted() {
+    this.popupCurrentNoteTitle = this.noteParams.name;
+  }, 
 }
 </script>
 
@@ -240,5 +311,11 @@ export default {
         display: flex;
       }
     }    
+
+    .popup-actions {
+      display: flex;
+      justify-content: space-between;
+    }
+
   }  
 </style>

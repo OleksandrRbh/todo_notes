@@ -72,8 +72,7 @@ export default {
   .v-btn {
     display: flex;
     justify-content: center;
-    align-items: center;
-    max-width: 160px;
+    align-items: center;    
     padding: 10px 20px;
     box-sizing: border-box;
     color: #ffffff;

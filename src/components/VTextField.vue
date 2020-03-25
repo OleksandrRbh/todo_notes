@@ -1,7 +1,7 @@
 <template>
   <div class="v-textfield">
     <label for="">{{ label }}
-      <input
+      <input        
         type="text"
         :value="value"
         @input="input"        
