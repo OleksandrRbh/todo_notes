@@ -1,30 +1,53 @@
 <template>
-  <div class="notes-list">   
-    <h1>{{ title }}</h1>
-    <div class="actions">
+  <div class="notes-list"> 
+    <div class="actions">  
+      <h1>{{ title }}</h1>    
       <router-link
+        class="link-btn"
         :to="{name: 'notes-new'}"
       >
-        <button>ADD NOTE</button>
-      </router-link>
+      <VBtn
+        title="Add note"
+        :disabled="false"
+        :bg_purple="true"
+        prependIcon="add"
+      />
+      </router-link>      
     </div>
     <div class="list">
       <div class="list-item" 
         v-for="(item, index) of notes" 
         :key="index"
       >
-        <h2>{{ item.name }}</h2>
-        <div v-if="item.todo_list">
-          <p v-if="item.todo_list[0]">{{ item.todo_list[0].todo || '' }}</p>
-          <p v-if="item.todo_list[1]">{{ item.todo_list[1].todo || '' }}</p>
-          <p v-if="item.todo_list[2]">{{ item.todo_list[2].todo || '' }}</p>  
+        <div class="list-item__content">
+          <div class="list-item__content-title">
+            <h2>{{ item.name }}</h2>
+          </div>
+          <div class="list-item__content-list" v-if="item.todo_list">
+            <p v-if="item.todo_list[0]">{{ item.todo_list[0].todo || '' }}</p>
+            <p v-if="item.todo_list[1]">{{ item.todo_list[1].todo || '' }}</p>
+            <p v-if="item.todo_list[2]">{{ item.todo_list[2].todo || '' }}</p>  
+          </div>
         </div>
-        <button @click="deleteNote(index)">DELETE</button>        
-        <router-link
-          :to="{name: 'notes-edit', params: {id: index}}"
-        >
-          <button>EDIT</button>
-        </router-link>
+        <div class="list-item__actions">
+          <VBtn
+            @click="deleteNote(index)"               
+            title="Delete note"        
+            :disabled="false"        
+            :bg_red="true"
+            prependIcon="delete"        
+          />       
+          <router-link
+            class="link-btn"
+            :to="{name: 'notes-edit', params: {id: index}}"
+          >          
+            <VBtn                            
+              title="Edit note"        
+              :disabled="false"            
+              prependIcon="create"        
+            />
+          </router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -32,17 +55,17 @@
 
 <script>
 import {mapState} from "vuex";
+import VBtn from "./VBtn"
 
 export default {
   name: 'NotesList',
   components: {    
-    
+    VBtn
   },  
   props: {},
   data() {
     return {
-      title: 'Мои заметки',
-      
+      title: 'My notes',      
     }
   },
   computed: {
@@ -61,9 +84,61 @@ export default {
 </script>
 
 <style lang="scss">
-  .list-item {
-    margin: 10px;
-    min-height: 20px;
-    border: 1px solid #eaeaea;
-  }
+  .notes-list {    
+
+    .actions {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center; 
+      margin-bottom: 20px;
+    }    
+   
+    .list-item {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-bottom: 15px;   
+      min-height: 130px;
+      padding: 20px 30px;
+      box-sizing: border-box;
+      border-radius: 10px;
+      //border: 1px solid #eaeaea;      
+      box-shadow: 0 5px 15px rgba(172, 172, 172, 0.5);      
+    }
+
+    .list-item__content {
+      display: flex;
+      flex-direction: row;
+      flex-grow: 1;
+
+      &-title {
+        display: flex;
+        align-items: center;
+        width: 50%;
+        border-right: 1px solid #cccccc;
+      }
+
+      &-list {
+        width: 50%;
+        padding-right: 10px;  
+        padding-left: 30px;        
+        box-sizing: border-box;
+        text-align: left;
+        overflow-x: hidden;
+      }
+
+      &-list p{
+        margin: 8px 0;        
+        color: #007c91;
+        overflow-x: hidden;
+      }
+    }
+
+    .list-item__actions {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  }  
 </style>

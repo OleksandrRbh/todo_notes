@@ -1,54 +1,116 @@
 <template>
   <div class="notes-edit">
-    <p>{{ title }}</p>    
+    <header class="notes-edit__header">
+      <span v-if="this.id !== undefined">{{ titleForEdit }}</span>
+      <span v-if="this.id === undefined">{{ titleForNew }}</span>      
+      <router-link
+        class="link-btn"
+        :to="{name: 'notes'}"
+      >          
+        <VBtn
+          @click="cancelChanges"
+          title="Cancel"        
+          :disabled="false"            
+          prependIcon="cancel"        
+        />
+      </router-link>
+    </header>
+    <main class="notes-edit__main">
       <div class="actions">
         <router-link
+          class="link-btn"
           :to="{name: 'notes'}"
-        >
-          <button @click="setNote">SAVE</button>
-        </router-link>
+        >          
+          <VBtn
+            class="action-btn"
+            @click="setNote"
+            title="Save note"        
+            :disabled="false"        
+            :bg_green="true"
+            prependIcon="save"        
+          />
+        </router-link>        
         <router-link
+          class="link-btn"
           :to="{name: 'notes'}"
-        >
-          <button @click="cancelChanges">CANCEL</button>
-        </router-link>
-        <router-link
-          :to="{name: 'notes'}"
-        >
-          <button @click="deleteNote">DELETE</button>
+        >          
+          <VBtn
+            class="action-btn"
+            @click="deleteNote"
+            title="Delete note"        
+            :disabled="false"        
+            :bg_red="true"
+            prependIcon="delete"        
+          />
         </router-link>
       </div>
       <div class="note">
-        <p>
-          <input type="text" name="" v-model="noteParams.name" placeholder="Имя заметки">
+        <div class="note__title-wrapper">          
+          <VTextField
+            class="note__title"
+            placeholder="Имя заметки"
+            v-model="noteParams.name"
+            label=""            
+          />
+        </div>
+        <p 
+          class="todo-item"
+          v-for="(todo, subindex) of noteParams.todo_list" 
+          :key="subindex"
+        >
+          <input class="checkbox" type="checkbox" name="" v-model="noteParams.todo_list[subindex].checked">          
+          <VTextField 
+            class="todo-field"           
+            v-model="noteParams.todo_list[subindex].todo"
+            label=""            
+          />
+          <VBtn
+            @click="deleteTodo(subindex)"
+            title="Delete todo"        
+            :disabled="false"        
+            :bg_red="true"
+            prependIcon="delete"        
+          />
         </p>
-        <p v-for="(todo, subindex) of noteParams.todo_list" :key="subindex">
-          <input type="checkbox" name="" v-model="noteParams.todo_list[subindex].checked">
-          <input type="text" name="" v-model="noteParams.todo_list[subindex].todo">        
-          <button @click="deleteTodo(subindex)">delele todo</button>
-        </p>
-        <p>
-          <input type="text" name="" v-model="newTodo" placeholder="Добавить задачу">
-          <button @click="addTodo">add todo</button>
-        </p>
-      </div>    
+        
+        <form class="form-add-todo" action="" @submit="addTodo">          
+          <VTextField 
+            placeholder="Добавить задачу"           
+            v-model="newTodo"
+            label=""            
+          />         
+          <VBtn   
+            @click="addTodo"            
+            title="Add todo"
+            :disabled="false"
+            :bg_purple="true"
+            prependIcon="add"
+          />
+        </form>
+        
+      </div> 
+    </main>
   </div>
 </template>
 
 <script>
 import {mapGetters} from "vuex";
+import VBtn from "./VBtn"
+import VTextField from "./VTextField"
 
 export default {
   name: 'NotesEdit',
   components: {
-    
+    VBtn,
+    VTextField
   },  
   props: {
     
   },
   data() {
     return {      
-      title: 'edit here', 
+      titleForEdit: 'Edit note', 
+      titleForNew: 'New note',
       id: this.$route.params.id,
       noteParams: {},
       newTodo: ''  
@@ -71,7 +133,7 @@ export default {
       this.newTodo = '';      
     },
     deleteTodo(subindex) {
-      this.noteParams.todo_list.splice(subindex, 1)
+      this.noteParams.todo_list.splice(subindex, 1);
     },
     setNote() {      
       if (this.$route.params.id || this.$route.params.id === 0) {
@@ -115,5 +177,68 @@ export default {
 </script>
 
 <style lang="scss">
-  
+  .notes-edit {
+
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 1px solid #cccccc;
+      margin-bottom: 20px;
+      padding: 0 0 20px
+    }
+
+    &__main {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: space-between; 
+      
+      .action-btn {
+        margin-bottom: 20px;
+      }
+
+      .note {
+        background-color: #ede7f6;
+        flex-grow: 1;
+        padding: 20px;
+        margin-right: 20px;
+      }
+
+      .note__title-wrapper {        
+        padding-bottom: 10px;      
+        border-bottom: 1px solid #cccccc;
+      }
+
+      .v-textfield.note__title {
+        text-align: left;
+      }
+
+      .v-textfield.note__title input {
+        font-size: 28px;          
+      }
+
+      .todo-item {
+        display:flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0;
+        padding: 10px 0 10px;
+        border-bottom: 1px solid #cccccc
+      }      
+
+      .checkbox {
+        width: 28px;
+        height: 28px;
+      }
+
+      .v-textfield.todo-field {
+        flex-grow: 1;   
+        display: flex;          
+      }
+
+      .form-add-todo {
+        display: flex;
+      }
+    }    
+  }  
 </style>
