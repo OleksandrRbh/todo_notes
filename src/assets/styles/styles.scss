@@ -13,3 +13,13 @@ body {
 .v-btn {
   min-width: 160px;
 }
+
+.v-btn.close-modal {
+  margin-right: 10px;
+}
+
+@media (max-width: 959px) {
+  body {
+    padding: 0;
+  }
+}

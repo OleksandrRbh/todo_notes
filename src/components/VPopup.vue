@@ -71,6 +71,7 @@
     position: fixed;
     top: 50px;    
     width: 400px;
+    max-width: -webkit-fill-available;
     background-color: #ffffff;
     border-radius: 5px;
     box-shadow: 0 0 15px #e7e7e7;

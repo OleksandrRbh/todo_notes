@@ -31,6 +31,7 @@
         </div>
         <div class="list-item__actions">
           <VBtn
+            class="delete-note-btn"
             @click="showPopupInfo(index)"                        
             title="Delete note"        
             :disabled="false"        
@@ -186,4 +187,64 @@ export default {
       justify-content: space-between;
     }
   }  
+
+  @media (max-width: 959px) {
+    .notes-list {
+
+      .list-item {      
+        flex-direction: column;              
+      }
+
+      .list-item__content {         
+        margin-bottom: 10px;
+      }
+
+      .list-item__content-title { 
+        height: 86px;             
+      }
+
+      .list-item__content-list { 
+        height: 86px;             
+      }
+
+      .list-item__actions {      
+        flex-direction: row;
+        justify-content: flex-end;
+      }
+
+      .delete-note-btn {      
+        margin-right: 20px;
+      }
+    }
+  }
+
+  @media (max-width: 599px) {
+    .notes-list {
+
+      .list-item__content {         
+        flex-direction: column;        
+      }
+
+      .list-item__content-title { 
+        width: auto; 
+        padding: 0 10px 0;
+        border-right: none; 
+        border-bottom: 1px solid #cccccc;;           
+      }
+
+      .list-item__content-list { 
+        width: auto; 
+        padding: 0 10px 0;            
+      }
+
+      .list-item__actions {      
+        flex-direction: column;        
+      }
+
+      .delete-note-btn {      
+        margin-right: 0;
+        margin-bottom: 10px;
+      }
+    }
+  }
 </style>

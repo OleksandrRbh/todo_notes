@@ -17,7 +17,7 @@
           :to="{name: 'notes'}"
         >          
           <VBtn
-            class="action-btn"
+            class="action-btn action-btn__save"
             @click="setNote"
             title="Save note"        
             :disabled="false"        
@@ -286,7 +286,8 @@ export default {
       }
 
       .v-textfield.note__title input {
-        font-size: 28px;          
+        font-size: 28px;
+        width: 100%;          
       }
 
       .todo-item {
@@ -310,6 +311,9 @@ export default {
 
       .form-add-todo {
         display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
       }
     }    
 
@@ -317,6 +321,61 @@ export default {
       display: flex;
       justify-content: space-between;
     }
-
   }  
+
+  @media (max-width: 959px) {
+    .notes-edit {
+
+      .notes-edit__main {
+        flex-direction: column;
+
+        .actions {
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-start;
+        }
+
+        .action-btn__save {
+          margin-right: 20px;
+        }
+
+        .note {
+          margin-right: 0;
+        }
+      }     
+    }
+  }
+
+  @media (max-width: 599px) {
+    .notes-edit {
+
+      .notes-edit__main {   
+        
+        .actions {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;          
+        }
+
+        .action-btn__save {
+          margin-right: 0;
+          margin-bottom: 10px;
+        }
+
+        .todo-item {
+          flex-wrap: wrap; 
+          
+          .v-btn {
+            width: 100%;
+            margin-top: 10px;
+          }
+        }  
+        
+        .form-add-todo {
+          flex-direction: column;
+        }
+        
+      }     
+    }
+  }
 </style>

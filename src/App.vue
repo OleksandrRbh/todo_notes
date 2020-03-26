@@ -33,4 +33,11 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+
+@media (max-width: 599px) {
+  #app {
+    border-radius: 0;
+    padding: 20px 20px 30px;
+  }  
+}
 </style>
